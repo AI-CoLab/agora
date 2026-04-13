@@ -28,13 +28,15 @@ def render_sunburst(df: pd.DataFrame):
     plot_df = filtered.copy()
     plot_df["Count"] = 1
 
-    # Build path depending on whether we're showing all or one portfolio
+    # Skip the Classification ring — go straight from Portfolio to
+    # Type of Body / Title.  Segments are coloured by Classification
+    # so A/B/C/D categories are still visually distinguishable.
     if selected_portfolio == "All Portfolios":
-        path = ["Portfolio", "Classification", "Type of Body", "Title"]
+        path = ["Portfolio", "Type of Body", "Title"]
         max_depth = 2
     else:
-        path = ["Portfolio", "Classification", "Type of Body", "Title"]
-        max_depth = 4
+        path = ["Portfolio", "Type of Body", "Title"]
+        max_depth = 3
 
     fig = px.sunburst(
         plot_df,
