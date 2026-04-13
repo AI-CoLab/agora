@@ -4,8 +4,6 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-from utils.constants import CLASSIFICATION_COLORS
-
 
 def render_treemap(df: pd.DataFrame):
     """Render an interactive treemap of government organisations."""
@@ -24,17 +22,16 @@ def render_treemap(df: pd.DataFrame):
         st.warning("No organisations match the selected filters.")
         return
 
-    # Build treemap with hierarchical path
-    # Add a count column for sizing
+    # Build treemap: Portfolio is top level, then Classification (A/B/C/D)
+    # nested within each portfolio, coloured by Portfolio
     plot_df = filtered.copy()
     plot_df["Count"] = 1
 
     fig = px.treemap(
         plot_df,
-        path=["Classification", "Portfolio", "Type of Body", "Title"],
+        path=["Portfolio", "Classification", "Type of Body", "Title"],
         values="Count",
-        color="Classification",
-        color_discrete_map=CLASSIFICATION_COLORS,
+        color="Portfolio",
         maxdepth=3,
     )
     fig.update_layout(
